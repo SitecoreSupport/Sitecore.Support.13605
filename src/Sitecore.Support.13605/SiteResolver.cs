@@ -29,7 +29,14 @@
     }
 
     protected override void UpdatePaths(HttpRequestArgs args, SiteContext site)
-    {     
+    {
+      if (!string.IsNullOrEmpty(args.Context.Request.PathInfo))
+      {
+        string filePath = args.Url.FilePath;
+        int num = filePath.LastIndexOf('.');
+        int num2 = filePath.LastIndexOf('/');
+        args.Url.ItemPath = ((num >= 0) ? ((num >= num2) ? filePath.Substring(0, num) : filePath) : filePath);
+      }
       args.StartPath = site.StartPath;
       args.Url.ItemPath = this.GetItemPath(args, site);
       site.Request.ItemPath = args.Url.ItemPath;
